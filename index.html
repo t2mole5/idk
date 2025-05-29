@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SocialSphere</title>
+  <style>
+    body { font-family: Arial; margin: 0; background: #f0f2f5; }
+    header { background: #4267B2; color: white; padding: 1em; display: flex; justify-content: space-between; align-items: center; }
+    nav a { color: white; margin: 0 10px; cursor: pointer; text-decoration: none; }
+
+    .hidden { display: none; }
+    .container { display: flex; margin: 1em; gap: 1em; }
+    .sidebar, .main, .profile { background: white; padding: 1em; border-radius: 5px; box-shadow: 0 0 10px #ccc; }
+    .sidebar { width: 20%; }
+    .main { width: 60%; }
+    .profile { width: 20%; }
+
+    textarea { width: 100%; margin-top: 0.5em; }
+    .post { margin-top: 1em; background: #f9f9f9; padding: 1em; border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<div id="loginPage">
+  <h2 style="text-align:center;">Login to SocialSphere</h2>
+  <div style="text-align:center;">
+    <input type="email" id="email" placeholder="Enter email" /><br/><br/>
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <h2>SocialSphere</h2>
+    <nav>
+      <a onclick="showHome()">Home</a>
+      <a onclick="showProfile()">Profile</a>
+      <a onclick="logout()">Logout</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <h3>Welcome, <span id="usernameDisplay">User</span></h3>
+    </div>
+
+    <div class="main" id="mainFeed">
+      <h3>Create a Post</h3>
+      <textarea id="postText" placeholder="What's on your mind?"></textarea><br/>
+      <button onclick="createPost()">Post</button>
+
+      <div id="posts"></div>
+    </div>
+
+    <div class="profile hidden" id="profilePage">
+      <h3>Edit Profile</h3>
+      <input type="text" id="newUsername" placeholder="New username" /><br/><br/>
+      <button onclick="saveUsername()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let username = "";
+
+  function login() {
+    const email = document.getElementById('email').value.trim();
+    if (email) {
+      username = email.split("@")[0];
+      document.getElementById('usernameDisplay').innerText = username;
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+    }
+  }
+
+  function logout() {
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('app').classList.add('hidden');
+  }
+
+  function showHome() {
+    document.getElementById('mainFeed').classList.remove('hidden');
+    document.getElementById('profilePage').classList.add('hidden');
+  }
+
+  function showProfile() {
+    document.getElementById('mainFeed').classList.add('hidden');
+    document.getElementById('profilePage').classList.remove('hidden');
+  }
+
+  function saveUsername() {
+    const newUsername = document.getElementById('newUsername').value.trim();
+    if (newUsername) {
+      username = newUsername;
+      document.getElementById('usernameDisplay').innerText = username;
+    }
+  }
+
+  function createPost() {
+    const text = document.getElementById('postText').value.trim();
+    if (text) {
+      const postDiv = document.createElement('div');
+      postDiv.className = 'post';
+      postDiv.innerHTML = `<strong>@${username}</strong><p>${text}</p>`;
+      document.getElementById('posts').prepend(postDiv);
+      document.getElementById('postText').value = '';
+    }
+  }
+</script>
+
+</body>
+</html>
